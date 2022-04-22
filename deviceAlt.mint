@@ -1,7 +1,6 @@
 # This is the larger device that is an integrated viral vector producer and analyzer
 # Consists of 3 components: bioreactor, preservation, cellular transduction
-# Bioreactor defined in a different .mint file
-
+# This is the version with the entire device in one file
 
 IMPORT viral_vector_bioreactor
 
@@ -9,8 +8,24 @@ DEVICE viral_vector_analysis
 
 LAYER FLOW
 
-# Using the bioreactor defined in the previous mint file
-viral_vector_bioreactor br1
+# Defining the main 4 components 
+PORT mediumIn, outPort r=515; # one input port and one output port
+V TREE in1 1 to 8 spacing = 4000 flowChannelWidth = 800; # tree in
+V TREE out1 8 to 1 spacing = 4000 flowChannelWidth = 800; # tree out
+
+# Creting a channel from the inlet to the tree
+CHANNEL c1 from mediumIn 2 to in1 1 w = 800; 
+
+# Creating each of the virus production channels
+# Essentailly a large channel that connects from the one tree branch to another
+CHANNEL virusProd1 from in1 2 to out1 1 w=2500;
+CHANNEL virusProd2 from in1 3 to out1 2 w=2500;
+CHANNEL virusProd3 from in1 4 to out1 3 w=2500;
+CHANNEL virusProd4 from in1 5 to out1 4 w=2500;
+CHANNEL virusProd5 from in1 6 to out1 5 w=2500;
+CHANNEL virusProd6 from in1 7 to out1 6 w=2500;
+CHANNEL virusProd7 from in1 8 to out1 7 w=2500;
+CHANNEL virusProd8 from in1 9 to out1 8 w=2500;
 
 # Adding the components for the preservation component
 PORT preservativeIn r=515; 
@@ -22,7 +37,7 @@ H MIXER mix4 numBends = 6 bendSpacing = 600 bendLength = 120000 channelWidth = 8
 
 # Connecting the media with virus to the first mixer 
 # The first node connects the preservative, viral vectors, and first mixer
-CHANNEL c1 from br1 2 to n1 4 w = 800;
+CHANNEL c2 from out1 9 to n1 4 w = 800;
 CHANNEL c3 from preservationIn 1 to n1 3 w = 800; 
 CHANNEL c4 from n1 2 to mix1 1 w = 800; 
 
