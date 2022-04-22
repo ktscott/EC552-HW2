@@ -8,7 +8,7 @@ module microfluidic (
 
     // Bioreactor takes the medium and creates a viral vector
     #MAP 'BIOREACTOR' '%' 
-    #MAP 'MIX' '~'
+    #MAP 'MIX' '+'
 
     // Creating the 8 channels in the bioreactor
     // Each channel undergoes its own bioreaction to produce a different amount of viral vector
@@ -22,15 +22,15 @@ module microfluidic (
     assign channel[7] = %medium;
 
     // in1 is the part that flows into the next 
-    assign in1 = channel[1] ~ channel[2] ~ channel[3] ~ channel[4] ~ channel[5] ~ channel[6] ~ channel[7] ~ channel[0] ~ preservative;
+    assign in1 = channel[1] + channel[2] + channel[3] + channel[4] + channel[5] + channel[6] + channel[7] + channel[0] + preservative;
 
     // Now defining the preservation compartment
     // Preservation compartment made up of 3 mixers 
     flow [0:2] preservation
 
-    assign preservation[0] = ~in1;
-    assign preservation[1] = ~in1;
-    assign preservation[2] = ~in1;
+    assign preservation[0] = +in1;
+    assign preservation[1] = +in1;
+    assign preservation[2] = +in1;
 
     // Now defining the cellular transduction compartment
     #MAP 'CELLULAR TRANSDUCTION' '!'
