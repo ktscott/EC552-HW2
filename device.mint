@@ -35,7 +35,7 @@ CHANNEL c8 from n2 3 to mix4 1 w = 800;
 # Creating the cellular transduction compartment
 # Creating the cellular transduction compartment
 PORT cells1, cells2, cells3, out1, out2, out3 r = 515;
-TRANSDUCTION analys1, analys2, analys3
+CHAMBER analys1, analys2, analys3
 
 # Creating the channels that connect the 2 inputs and one output to the transduction compartment
 CHANNEL c7 from mix1 2 to analys1 1 w=800;

@@ -1,42 +1,67 @@
-module microfluidic (
-    finput medium, preservative, [0:3] cells,
-    foutput [0:2] out)
+module device(finput medium, preservative, cells1, cells2, cells3, foutput out1,out2,out3);
+    // The first part is the Bioreactor
+    // The medium flows through 8 separate channels and produces viral vectors in that time
+    flow supernatent, channel1, channel2, channel3, channel4, channel5, channel6, channel7, channel8;
 
-    // First part is creating the Bioreactor part of the microfludic device
-    // Contians 8 channels where the bioreaction actually happens, and one other channel with the preservative
-    flow [0:7] channel;
+    #MAP 'BIOREACT' '+'
+    // Producing the viral vectors in the 8 channels
+    assign channel1 = +medium;
+    assign channel2 = +medium;
+    assign channel3 = +medium; 
+    assign channel4 = +medium;
+    assign channel5 = +medium;
+    assign channel6 = +medium;
+    assign channel7 = +medium;
+    assign channel8 = +medium; 
 
-    // Bioreactor takes the medium and creates a viral vector
-    #MAP 'BIOREACTOR' '%' 
-    #MAP 'MIX' '+'
+    // The channels merge to create a supernatent 
+    assign supernatent = channel1;
+    assign supernatent = channel2;
+    assign supernatent = channel3; 
+    assign supernatent = channel4;
+    assign supernatent = channel5;
+    assign supernatent = channel6;
+    assign supernatent = channel7;
+    assign supernatent = channel8;
 
-    // Creating the 8 channels in the bioreactor
-    // Each channel undergoes its own bioreaction to produce a different amount of viral vector
-    assign channel[0] = %medium;
-    assign channel[1] = %medium;
-    assign channel[2] = %medium;
-    assign channel[3] = %medium;
-    assign channel[4] = %medium;
-    assign channel[5] = %medium;
-    assign channel[6] = %medium;
-    assign channel[7] = %medium;
+    // Next the supernatant is mixed with the preservative at some volum and ratio
+    #MAP 'MIX' '%'
 
-    // in1 is the part that flows into the next 
-    assign in1 = channel[1] + channel[2] + channel[3] + channel[4] + channel[5] + channel[6] + channel[7] + channel[0] + preservative;
+    flow mixer1, mixer2, mixer3, mixer4;
 
-    // Now defining the preservation compartment
-    // Preservation compartment made up of 3 mixers 
-    flow [0:2] preservation
+    assign mixer1 = supernatent%1;
+    assign mixer1 = preservative%1;
 
-    assign preservation[0] = +in1;
-    assign preservation[1] = +in1;
-    assign preservation[2] = +in1;
+    // The preserved viral vectors then get separated into 3 separate mixers
+    assign mixer2 = mixer1;
+    assign mixer3 = mixer1;
+    assign mixer4 = mixer1; 
 
-    // Now defining the cellular transduction compartment
-    #MAP 'CELLULAR TRANSDUCTION' '!'
+    // The mixers are then fed into a cellular transduction compartment
+    // The cellular transduction essentailly stores the viral vectors for analysis
+    // Cellular transduction is essentially analysis
+    // Cells are inputted for analysis
+    // The viral vectors are then outputted
+    #MAP 'CELLULAR TRANSDUCTION' '~'
 
-    assign out[0] = cells[0] ! preservation[0];
-    assign out[1] = cells[1] ! preservation[1];
-    assign out[2] = cells[2] ! preservation[2];
+    flow chamber1, chamber2, chamber3;
+
+    assign chamber1 = cells1;
+    assign chamber1 = mixer2;
+    assign chamber1 = ~chamber1;
+
+    assign out1 = chamber1;
+
+    assign chamber2 = cells2;
+    assign chamber2 = mixer3;
+    assign chamber2 = ~chamber2;
+
+    assign out2 = chamber2;
+
+    assign chamber3 = cells3;
+    assign chamber3 = mixer4;
+    assign chamber3 = ~chamber3;
+
+    assign out3 = chamber3;
 
 endmodule
